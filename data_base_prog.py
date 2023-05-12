@@ -158,7 +158,7 @@ def sum_check(
 
     conn.close()
 
-    return print(sum_result)
+    return sum_result
 
 
 def main(command_line=None):
