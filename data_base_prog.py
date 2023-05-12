@@ -95,9 +95,9 @@ def select_all(database_path: Path) -> t.List[t.Dict[str, t.Any]]:
     conn.close()
     return [
         {
-            "s_b_a": row[0],
-            "b_a": row[1],
-            "t_a": row[2],
+            "sender": row[0],
+            "receiver": row[1],
+            "transfer": row[2],
         }
         for row in rows
     ]
@@ -130,9 +130,9 @@ def display_accs(accounts: t.List[t.Dict[str, t.Any]]) -> None:
             print(
                 '| {:^2} | {:^25} | {:^25} | {:^10} |'.format(
                     ind,
-                    requisite.get('s_b_a'),
-                    requisite.get('b_a'),
-                    requisite.get('t_a'),
+                    requisite.get('sender'),
+                    requisite.get('receiver'),
+                    requisite.get('transfer'),
                 )
             )
             print(line)
@@ -158,7 +158,7 @@ def sum_check(
 
     conn.close()
 
-    return sum_result
+    return print(sum_result)
 
 
 def main(command_line=None):
@@ -188,7 +188,7 @@ def main(command_line=None):
     )
     add.add_argument(
         "-s",
-        "--s_b_a",
+        "--sender",
         action="store",
         type=int,
         required=True,
@@ -196,14 +196,14 @@ def main(command_line=None):
     )
     add.add_argument(
         "-r",
-        "--b_a",
+        "--receiver",
         action="store",
         type=int,
         help="Аккаунт получатель"
     )
     add.add_argument(
         "-t",
-        "--t_a",
+        "--transfer",
         action="store",
         type=int,
         required=True,
@@ -222,8 +222,8 @@ def main(command_line=None):
         help="Проверить"
     )
     select.add_argument(
-        "-t",
-        "--s_b_a",
+        "-s",
+        "--sender",
         action="store",
         type=int,
         required=True,
@@ -239,7 +239,7 @@ def main(command_line=None):
 
     # Добавить работника.
     if args.command == "add":
-        add_account(db_path, args.s_b_a, args.b_a, args.t_a)
+        add_account(db_path, args.sender, args.receiver, args.transfer)
 
     # Отобразить всех работников.
     elif args.command == "display":
@@ -247,10 +247,9 @@ def main(command_line=None):
 
     # Выбрать требуемых работников.
     elif args.command == "check":
-        sum_check(db_path, args.s_b_a)
+        sum_check(db_path, args.sender)
         pass
 
 
 if __name__ == "__main__":
     main()
-
